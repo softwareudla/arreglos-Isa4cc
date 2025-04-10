@@ -13,7 +13,7 @@ int main(int argc, char const *argv[])
     int cant_reprobados[3] = {0, 0, 0};
     float promedios_asignatura[3] = {0, 0, 0};
     float promedios_estudiante[5] = {0, 0, 0, 0, 0};
-    int val, opcin, len, cont = 0, mat = -1;
+    int val, opcin, len, cont = 0, mat = -1, duplicado;
     char nombuscar[30];
     
     /*Con el fin de evitar que datos residuales de la memoria
@@ -35,13 +35,24 @@ int main(int argc, char const *argv[])
         printf("\n");
         printf("Ingrese una opcion:\n");
         printf(">> ");
-        scanf("%d", &opcin);
+        
+        do
+        {
+            fflush(stdin);
+            val = scanf("%d", &opcin);
+            if (val != 1)
+            {
+                printf("Por favor, ingrese un valor correcto..\n");
+            }
+        } while (val != 1);
+
         switch (opcin)
         {
         case 1:
             char continuar;
             cont = 0;
             mat = 0;
+
 
             do
             {
@@ -53,32 +64,81 @@ int main(int argc, char const *argv[])
                 {
                     printf("Por favor, ingrese un valor correcto..\n");
                 }
-                else if (mat < 0 || mat > 3)
+                else if (mat < 1 || mat > 3)
                 {
-                    printf("Las calificaciones no pueden ser negativas o mayores a 3.\n");
+                    printf("Las calificaciones no pueden ser negativas / cero o mayores a 3.\n");
                 }
-            } while (val != 1 || mat < 0 || mat > 3);
+            } while (val != 1 || mat < 1 || mat > 3);
 
             for (int i = 0; i < mat; i++)
             {
-                printf("Ingrese el nombre de la materia %d:\n>> ", i);
-                fflush(stdin);
-                fgets(materia[i], 30, stdin);
+                duplicado = 0;
+                do
+                {
+                    printf("Ingrese el nombre de la materia %d:\n>> ", i);
+                    fflush(stdin);
+                    fgets(materia[i], 30, stdin);
 
-                len = strlen(materia[i]) - 1;
-                materia[i][len] = '\0';
+                    len = strlen(materia[i]) - 1;
+                    materia[i][len] = '\0';
+
+                    if(strlen(materia[i]) == 0)
+                    {
+                        printf("El nombre de la materia no puede estar vacio\n");
+                    }
+                    else
+                    {
+                        for (int j = 0; j < i; j++)
+                        {
+                            if (strcmp(materia[i], materia[j]) == 0)
+                            {
+                                duplicado = 1;
+                                printf("Ya existe una materia con ese nombre, por favor ingrese otro.\n");
+                            }
+                            else
+                            {
+                                duplicado = 0;
+                            }
+                        }
+
+                    }
+                } while (duplicado == 1 || strlen(materia[i]) == 0);
             }
 
             do
             {
-                // Pedir el nombre del alumno
-                printf("Ingrese el nombre del alumno %d: ", cont);
-                fflush(stdin);
-                fgets(alumnos[cont], 30, stdin);
+                do
+                {
+                    // Pedir el nombre del alumno
+                    printf("Ingrese el nombre del alumno %d: ", cont);
+                    fflush(stdin);
+                    fgets(alumnos[cont], 30, stdin);
 
-                len = strlen(alumnos[cont]) - 1;
-                alumnos[cont][len] = '\0';
+                    len = strlen(alumnos[cont]) - 1;
+                    alumnos[cont][len] = '\0';
 
+                    if(strlen(alumnos[cont]) == 0)
+                    {
+                        printf("El nombre del alumno no puede estar vacio\n");
+                    }else
+                    {
+                        for (int j = 0; j < cont; j++)
+                        {
+                            duplicado = 0;
+                            if (strcmp(alumnos[cont], alumnos[j]) == 0)
+                            {
+                                duplicado = 1;
+                                printf("Ya existe un alumno con ese nombre, por favor ingrese otro.\n");
+                            }
+                            else
+                            {
+                                duplicado = 0;
+                            }
+                        }
+
+                    }
+                } while (strlen(alumnos[cont]) == 0 || duplicado == 1);
+                
                 // Pedir las calificaciones
                 printf("Ingrese las calificaciones del estudiante %s:\n", alumnos[cont]);
                 for (int j = 0; j < mat; j++)
