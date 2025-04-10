@@ -13,9 +13,9 @@ int main(int argc, char const *argv[])
     int cant_reprobados[3] = {0, 0, 0};
     float promedios_asignatura[3] = {0, 0, 0};
     float promedios_estudiante[5] = {0, 0, 0, 0, 0};
-    int auxil = -1, val, opcin, len, cont = 0;
+    int val, opcin, len, cont = 0, mat = -1;
     char nombuscar[30];
-
+    
     /*Con el fin de evitar que datos residuales de la memoria
     dedicada a este arreglo interfiera con el resultado del programa*/
 
@@ -41,7 +41,7 @@ int main(int argc, char const *argv[])
         case 1:
             char continuar;
             cont = 0;
-            int mat = 0;
+            mat = 0;
 
             do
             {
@@ -133,6 +133,12 @@ int main(int argc, char const *argv[])
             break;
 
         case 2:
+            if(mat == -1)
+            {
+                printf("No se han ingresado materias, por favor ingrese primero los datos de los estudiantes\n");
+                break;
+            }
+            // Calcular el promedio de calificaciones para cada estudiante
             int f = 0;
 
             printf("Ingrese el nombre del estudiante que desea obtener el promedio de notas...\n");
@@ -170,6 +176,11 @@ int main(int argc, char const *argv[])
             }
             break;
         case 3:
+            if (mat == -1)
+            {
+                printf("No se han ingresado materias, por favor ingrese primero los datos de los estudiantes\n");
+                break;
+            }
             f = 0;
 
             printf("Ingrese el nombre de la materia que desea obtener el promedio de notas...\n");
@@ -213,6 +224,11 @@ int main(int argc, char const *argv[])
 
             break;
         case 4:
+            if (mat == -1)
+            {
+                printf("No se han ingresado materias, por favor ingrese primero los datos de los estudiantes\n");
+                break;
+            }
 
             // Hallar la calificación más alta y baja por estudiante
             float max = -1, min = 11;
@@ -263,6 +279,11 @@ int main(int argc, char const *argv[])
             break;
 
         case 5:
+            if (mat == -1)
+            {
+                printf("No se han ingresado materias, por favor ingrese primero los datos de los estudiantes\n");
+                break;
+            }
 
             // Hallar la calificación más alta y baja por materia
             max = -1, min = 11;
@@ -309,6 +330,37 @@ int main(int argc, char const *argv[])
             {
                 printf("No existe ninguna materia en la base con ese nombre\n");
             }
+
+            break;
+        
+        case 6:
+            if (mat == -1)
+            {
+                printf("No se han ingresado materias, por favor ingrese primero los datos de los estudiantes\n");
+                break;
+            }
+
+            // Determinar cuantos estudiantes aprobaron o reprobaron cada asignatura
+            for (int i = 0; i < mat; i++)
+            {
+                cant_aprobados[i] = 0;
+                cant_reprobados[i] = 0;
+                for (int j = 0; j < cont; j++)
+                {
+                    if(calificaciones[j][i] >= 6)
+                    {
+                        cant_aprobados[i]++;
+                    }
+                    else
+                    {
+                        cant_reprobados[i]++;
+                    }
+                }
+                printf("Materia: %s\n", materia[i]);
+                printf("Aprobados: %d\n", cant_aprobados[i]);
+                printf("Reprobados: %d\n", cant_reprobados[i]);
+            }
+           
 
             break;
 
