@@ -19,7 +19,6 @@ int main(int argc, char const *argv[])
     /*Con el fin de evitar que datos residuales de la memoria
     dedicada a este arreglo interfiera con el resultado del programa*/
 
-
     do
     {
         printf("==================================================\n");
@@ -41,10 +40,26 @@ int main(int argc, char const *argv[])
         {
         case 1:
             char continuar;
-            printf("Ingrese el nombre de las 3 materias\n");
-            // Pedir el nombre de las materias
-            printf("\n");
-            for (int i = 0; i < 3; i++)
+            cont = 0;
+            int mat = 0;
+
+            do
+            {
+                printf("Ingrese el numeros de materias, recuerde que el maximo es de 3\n");
+                printf(">> ");
+                fflush(stdin);
+                val = scanf("%d", &mat);
+                if (val != 1)
+                {
+                    printf("Por favor, ingrese un valor correcto..\n");
+                }
+                else if (mat < 0 || mat > 3)
+                {
+                    printf("Las calificaciones no pueden ser negativas o mayores a 3.\n");
+                }
+            } while (val != 1 || mat < 0 || mat > 3);
+
+            for (int i = 0; i < mat; i++)
             {
                 printf("Ingrese el nombre de la materia %d:\n>> ", i);
                 fflush(stdin);
@@ -53,6 +68,7 @@ int main(int argc, char const *argv[])
                 len = strlen(materia[i]) - 1;
                 materia[i][len] = '\0';
             }
+
             do
             {
                 // Pedir el nombre del alumno
@@ -65,7 +81,7 @@ int main(int argc, char const *argv[])
 
                 // Pedir las calificaciones
                 printf("Ingrese las calificaciones del estudiante %s:\n", alumnos[cont]);
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < mat; j++)
                 {
 
                     do
@@ -92,16 +108,23 @@ int main(int argc, char const *argv[])
                 printf("¿Desea ingresar otro estudiante? (s/n): ");
                 fflush(stdin);
                 scanf("%c", &continuar);
-
-                while (continuar != 'N' && continuar != 'n' && continuar != 'S' && continuar != 's')
+                if (cont > 4)
                 {
-                    printf("Ingrese una opcion valida\n");
-                    fflush(stdin);
-                    scanf("%c", &continuar);
-
-                    if (continuar != 'N' && continuar != 'n' && continuar != 'S' && continuar != 's')
+                    printf("No se pueden ingresar mas de 5 estudiantes\n");
+                    continuar = 'N';
+                }
+                else
+                {
+                    while (continuar != 'N' && continuar != 'n' && continuar != 'S' && continuar != 's')
                     {
-                        printf("Ingrese los valores correctos\n");
+                        printf("Ingrese una opcion valida\n");
+                        fflush(stdin);
+                        scanf("%c", &continuar);
+
+                        if (continuar != 'N' && continuar != 'n' && continuar != 'S' && continuar != 's')
+                        {
+                            printf("Ingrese los valores correctos\n");
+                        }
                     }
                 }
 
@@ -129,14 +152,13 @@ int main(int argc, char const *argv[])
                     if (alumnos[i][len] == '\n')
                     {
                         alumnos[i][len] = '\0';
-                        
                     }
                     f = 1;
                     promedios_estudiante[i] = 0;
 
-                    for (int j = 0; j < 3; j++)
+                    for (int j = 0; j < mat; j++)
                     {
-                        promedios_estudiante[i] += calificaciones[i][j] / 3;
+                        promedios_estudiante[i] += calificaciones[i][j] / mat;
                     }
                     printf("\n");
                     printf("El promedio es: %.2f\n", promedios_estudiante[i]);
@@ -158,7 +180,7 @@ int main(int argc, char const *argv[])
             len = strlen(nombuscar) - 1;
             nombuscar[len] = '\0';
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < mat; i++)
             {
                 if (strcmp(materia[i], nombuscar) == 0)
                 {
@@ -167,7 +189,6 @@ int main(int argc, char const *argv[])
                     if (materia[i][len] == '\n')
                     {
                         materia[i][len] = '\0';
-                        
                     }
                     f = 1;
                     promedios_asignatura[i] = 0;
@@ -192,7 +213,7 @@ int main(int argc, char const *argv[])
 
             break;
         case 4:
-            
+
             // Hallar la calificación más alta y baja por estudiante
             float max = -1, min = 11;
             f = 0;
@@ -213,11 +234,10 @@ int main(int argc, char const *argv[])
                     if (alumnos[i][len] == '\n')
                     {
                         alumnos[i][len] = '\0';
-                        
                     }
                     f = 1;
 
-                    for (int j = 0; j < 3; j++)
+                    for (int j = 0; j < mat; j++)
                     {
                         if (calificaciones[i][j] > max)
                         {
@@ -227,19 +247,67 @@ int main(int argc, char const *argv[])
                         {
                             min = calificaciones[i][j];
                         }
-
                     }
                     calificacion_alta[i][0] = max;
                     calificacion_baja[i][0] = min;
 
-                    printf("Clasificacion mas alta: %.2f\n", calificacion_alta[i][0]);
-                    printf("Clasificacion mas baja: %.2f\n", calificacion_baja[i][0]);
-                    
+                    printf("Calificacion mas alta: %.2f\n", calificacion_alta[i][0]);
+                    printf("Calificacion mas baja: %.2f\n", calificacion_baja[i][0]);
                 }
             }
             if (f == 0)
             {
                 printf("No existe ningun estudiante llamado asi\n");
+            }
+
+            break;
+
+        case 5:
+
+            // Hallar la calificación más alta y baja por materia
+            max = -1, min = 11;
+            f = 0;
+            printf("Ingrese el nombre de la materia para la cual desea obtener sus maximas y minimas notas.\n");
+            printf(">> ");
+            fflush(stdin);
+            fgets(nombuscar, 30, stdin);
+
+            len = strlen(nombuscar) - 1;
+            nombuscar[len] = '\0';
+
+            for (int i = 0; i < mat; i++)
+            {
+                if (strcmp(materia[i], nombuscar) == 0)
+                {
+                    printf("Asignatura %s\n", materia[i]);
+                    len = strlen(materia[i]) - 1;
+                    if (materia[i][len] == '\n')
+                    {
+                        materia[i][len] = '\0';
+                    }
+                    f = 1;
+
+                    for (int j = 0; j < cont; j++)
+                    {
+                        if (calificaciones[j][i] > max)
+                        {
+                            max = calificaciones[j][i];
+                        }
+                        if (calificaciones[j][i] < min)
+                        {
+                            min = calificaciones[j][i];
+                        }
+                    }
+                    calificacion_alta[0][i] = max;
+                    calificacion_baja[0][i] = min;
+
+                    printf("Calificacion mas alta: %.2f\n", calificacion_alta[0][i]);
+                    printf("Calificacion mas baja: %.2f\n", calificacion_baja[0][i]);
+                }
+            }
+            if (f == 0)
+            {
+                printf("No existe ninguna materia en la base con ese nombre\n");
             }
 
             break;
